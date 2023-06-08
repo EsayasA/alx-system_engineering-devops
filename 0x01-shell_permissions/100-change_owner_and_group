@@ -1,2 +1,3 @@
 #!/bin/bash
-chown vincent:staff 100-change_owner_and_group
+for file in *; do
+chown vincent:staff $file
