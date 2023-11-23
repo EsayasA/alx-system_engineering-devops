@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+#prints best school ten times and in the 9
+#th iteration it will print Hi
+i=0
+while [ $i -lt 10 ]
+do
+  if [ $i -eq 9 ]
+  then
+    echo "Hi"
+  fi
+  echo "Best School"
+  (( i++ ))
+done
