@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Configuration
+echo -e "Updating and installing Nginx.\n"
+sudo apt-get update -y -qq && \
+	 sudo apt-get install nginx -y
+
+echo -e "\nSetting up some minor stuff.\n"
+
+# service start
+sudo service nginx start
+
+# firewall allow
+sudo ufw allow 'Nginx HTTP'
+
+# ownership
+sudo chown -R "$USER":"$USER" /var/www/html
+sudo chmod -R 755 /var/www
+
+# backup
+cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
+
+# html
+echo -e "Hello World!" | dd status=none of=/var/www/html/index.nginx-debian.html
+
+# start again 
+sudo service nginx restart
+
+echo -e "\nCompleted. ✅\n"
