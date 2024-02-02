@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+#dig information
+#check for argument
+if [ $# -lt 1 ]; then
+  echo "Usage: $0 domain [subdomain1 subdomain2 ...]"
+  exit 1
+fi
+#domain name
+domain="$1"
+#subdomain
+subdomains=("www" "lb-01" "web-01" "web-02")
+#added subdomain
+if [ $# -gt 1 ]; then
+  subdomains+=("${@:2}")
+fi
+#check for each subdomain
+for subdomain in "${subdomains[@]}"; do
+  output=$(dig "$subdomain.$domain" +short)
+  if [ -n "$output" ]; then
+    echo "The subdomain $subdomain has IP address $output"
+  else
+    echo "The subdomain $subdomain does not exist"
+  fi
+done
