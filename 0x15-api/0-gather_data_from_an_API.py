@@ -1,29 +1,36 @@
 #!/usr/bin/python3
-"""For a given employee ID"""
 
-import requests
-import sys
+"""
+Python script that, using a REST API, for a given employee ID.
+"""
+
+from requests import get
+from sys import argv
+
 
 if __name__ == "__main__":
-
-    Id = sys.argv[1]
-    user = requests.get("https://jsonplaceholder.typicode.com/users/{}"
-                        .format(Id))
-
-    name = user.json().get('person')
-
-    todos = requests.get('https://jsonplaceholder.typicode.com/todos')
-    totalTasks = 0
+    res = get('https://jsonplaceholder.typicode.com/todos/')
+    information = res.json()
     completed = 0
+    total = 0
+    tasks = []
+    response = get('https://jsonplaceholder.typicode.com/users')
+    data = response.json()
 
-    for task in todos.json():
-        if task.get('Id') == int(Id):
-            totalTasks += 1
-            if task.get('completed'):
+    for k in data:
+        if k.get('id') == int(argv[1]):
+            person = k.get('name')
+
+    for k in information:
+        if k.get('userId') == int(argv[1]):
+            total += 1
+
+            if k.get('completed') is True:
                 completed += 1
+                tasks.append(k.get('title'))
 
-    print('Employee {} is done with tasks({}/{}):'
-          .format(name, completed, totalTasks))
+    print("Employee {} is done with tasks({}/{}):".format(person, completed,
+                                                          total))
 
-    print('\n'.join(["\t " + task.get('title') for task in todos.json()
-          if task.get('Id') == int(Id) and task.get('completed')]))
+    for i in tasks:
+        print("\t {}".format(i))
